@@ -1,5 +1,13 @@
 # Assignment One
 
+## Name: Freddie Basket
+
+## Comments to grader
+
+Anything you want the grader to know; otherwise just remove this section.
+
+## The assignment
+
 The first coursework assignment on a Simple Machine Language (SML) interpreter.
 
 The aim of this assignment is to give you practice with:

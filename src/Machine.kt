@@ -5,7 +5,7 @@ import java.util.Scanner
 /*
  * The machine language interpreter
  */
-data class Machine(var pc: Int) {
+data class Machine(var pc: Int, val noOfRegisters: Int) {
     // The labels in the SML program, in the order in which
     // they appear (are defined) in the program
 
@@ -24,7 +24,7 @@ data class Machine(var pc: Int) {
     init {
         labels = Labels()
         prog = ArrayList<Instruction>()
-        registers = Registers()
+        registers = Registers(noOfRegisters)
     }
 
     // Print the program
@@ -160,7 +160,7 @@ data class Machine(var pc: Int) {
                 System.exit(-1)
             }
 
-            val m = Machine(0) // initialise to first instruction
+            val m = Machine(0, 32) // initialise to first instruction
             if (!m.readAndTranslate(args[0])) { // convert and add to machine
                 println("Translation phase failed!!")
             } else {

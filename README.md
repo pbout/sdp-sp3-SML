@@ -1,6 +1,6 @@
 # Assignment One
 
-The first coursework assignment on a Simple Machine Language (SML) interpreter.
+The first coursework assignment on a Simple sml.Machine Language (SML) interpreter.
 
 The aim of this assignment is to give you practice with subclasses, modifying existing code, and the use of reflection.
 
@@ -18,11 +18,11 @@ where
 In SML, there are instructions for adding, multiplying and so on, for storing and retrieving integers, and for conditionally branching to other labels (like an `if` statement).
 
 `register-list` is the list of registers that the instruction manipulates.
-Registers are simple, integer, storage areas in computer memory, much like variables. In SML, there are 32 registers, numbered 0, 1, ... , 31.
+sml.Registers are simple, integer, storage areas in computer memory, much like variables. In SML, there are 32 registers, numbered 0, 1, ... , 31.
 
 SML has the following instructions:
 
-| Instruction  | Description  |
+| sml.Instruction  | Description  |
 |---------------|----------------|
 | `L1 add r s1 s2` | Add the contents of registers `s1` and `s2` and store the result in register `r` |
 | `L1 sub r s1 s2` | Subtract the contents of register `s2` from the contents of `s1` and store the result in register `r`   |
@@ -68,7 +68,7 @@ Follow our directions on carrying out the project, and the work should take arou
 
 We provide some of the classes, provide specifications of a few, and leave a few for you to write/complete. 
 The code we provide does some of the dirty work of reading in a program and translating it to an internal form, so you can concentrate just on the code that executes the program. 
-Study the class `Machine` first, for it is the heart of the program.
+Study the class `sml.Machine` first, for it is the heart of the program.
 
 **Please note**: The following description mainly relates to the Kotlin version of the source code. The Scala version is somewhat shorter as several constructs are easier to achieve using that language. 
 Please consult the Scala source code for further details.
@@ -77,7 +77,7 @@ Please consult the Scala source code for further details.
 
 You are provided with some skeleton code which is on the repository.
 
-Look at the fields of class `Machine`, which contain exactly what is needed to execute
+Look at the fields of class `sml.Machine`, which contain exactly what is needed to execute
 an SML program:
 
 + the *labels* defined in the program,
@@ -88,7 +88,7 @@ an SML program:
 Array like structures are used for the labels and the instructions of the machine because there is no limit to the size of an SML program. 
 An array is used for the registers because there are always exactly 32 registers.
 
-Now read method `Machine.execute`, which executes the program. 
+Now read method `sml.Machine.execute`, which executes the program. 
 It is a typical *fetch-execute* cycle that all machines have in some form. 
 At each iteration, the instruction to execute is fetched, the program counter is incremented, and the instruction is executed. 
 The order of the last two instructions is important, because an instruction (e.g., `bnz`) 
@@ -99,9 +99,9 @@ For example, there is no checking for duplicate label definitions, for the use o
 
 Finally, study the `main` method/function.
 
-## Class `Instruction` and it subclasses
+## Class `sml.Instruction` and it subclasses
 
-All the programming that you do has to do with class `Instruction` and its subclasses. 
+All the programming that you do has to do with class `sml.Instruction` and its subclasses. 
 The specification of class has been given to you and you should examine it.
 
 This class is *abstract*, because it should not be instantiated. 
@@ -112,9 +112,9 @@ Therefore, these properties are maintained in the base class of all instructions
 
 ## Your tasks
 
-1. Your first task is to complete the methods in the class `Instruction` — this may require you to add some fields, which should be protected, so that they are accessible in subclasses and not to the *outside* world.
+1. Your first task is to complete the methods in the class `sml.Instruction` — this may require you to add some fields, which should be protected, so that they are accessible in subclasses and not to the *outside* world.
 
-2. Now create a subclass of `Instruction` for each kind of SML instruction and 
+2. Now create a subclass of `sml.Instruction` for each kind of SML instruction and 
 fix `Translator.instruction` so that it properly translates that kind of instruction.
 
  **Recommended**: Write one instruction at a time and check it out thoroughly, before proceeding to the next!
@@ -124,7 +124,7 @@ After you have checked that the instruction `add` works correctly, progress to w
 `add` and `subtract` instructions, etc. 
 As you do this, you will see that each successive class can be written by duplicating a previous one and modifying it (obviously avoiding too much repeated code).
 
-3. For each instruction, the subclass needs appropriate fields, a constructor, method `toString`, and a method `execute`; `toString` and `execute` should override the same methods in class `Instruction`.
+3. For each instruction, the subclass needs appropriate fields, a constructor, method `toString`, and a method `execute`; `toString` and `execute` should override the same methods in class `sml.Instruction`.
 
 4. Start with the `add` instruction, because the code for translating it is already there — in method `Translator.instruction`. 
 Initially, the program will not compile because there is no class for the instruction `add`. 

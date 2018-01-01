@@ -1,6 +1,13 @@
+package sml
+
+import sml.instructions.AddInstruction
+import sml.instructions.LinInstruction
+import sml.instructions.NoOpInstruction
 import java.io.File
 import java.io.IOException
 import java.util.Scanner
+import kotlin.collections.ArrayList
+import kotlin.collections.MutableList
 
 /*
  * The machine language interpreter
@@ -12,7 +19,7 @@ data class Machine(var pc: Int, val noOfRegisters: Int) {
     val labels: Labels
 
     // The SML program, consisting of prog.size() instructions, each
-    // of class Instruction (or one of its subclasses)
+    // of class sml.Instruction (or one of its subclasses)
     val prog: MutableList<Instruction>
 
     // The registers of the SML machine
@@ -27,8 +34,9 @@ data class Machine(var pc: Int, val noOfRegisters: Int) {
         registers = Registers(noOfRegisters)
     }
 
-    // Print the program
-
+    /**
+     * Print the program
+     */
     override fun toString(): String {
         val s = StringBuffer()
         for (i in 0 until prog.size)
@@ -36,23 +44,26 @@ data class Machine(var pc: Int, val noOfRegisters: Int) {
         return s.toString()
     }
 
-    // Execute the program in prog, beginning at instruction 0.
-    // Precondition: the program and its labels have been store properly.
-
+    /**
+     * Execute the program in prog, beginning at instruction 0.
+     * Precondition: the program and its labels have been store properly.
+     */
     fun execute() {
         while (pc < prog.size) {
-            val ins = prog[pc]
-            pc++
+            val ins = prog[pc++]
             ins.execute(this)
         }
     }
 
+    // root of files
     private val PATH = System.getProperty("user.dir") + "/"
-
+    // input line of file
     private var line: String = ""
 
-    // translate the small program in the file into lab (the labels) and prog (the program)
-    // return "no errors were detected"
+    /**
+     * translate the small program in the file into lab (the labels) and prog (the program)
+     * return "no errors were detected"
+     */
     fun readAndTranslate(file: String): Boolean {
         val fileName = PATH + file // source file of SML code
         try {
@@ -84,14 +95,14 @@ data class Machine(var pc: Int, val noOfRegisters: Int) {
         return true
     }
 
-    // line should consist of an MML instruction, with its label already
-    // removed. Translate line into an instruction with label label
-    // and return the instruction
+    /**
+     * line should consist of an MML instruction, with its label already removed.
+     * Translate line into an instruction with label label and return the instruction
+     */
     fun getInstruction(label: String): Instruction? {
         val s1: Int // Possible operands of the instruction
         val s2: Int
         val r: Int
-        val x: Int
 
         if (line == "")
             return null
@@ -134,8 +145,10 @@ data class Machine(var pc: Int, val noOfRegisters: Int) {
         return word
     }
 
-    // Return the first word of line as an integer. If there is
-    // any error, return the maximum int
+    /**
+     * Return the first word of line as an integer. If there is
+     * any error, return the maximum int
+     */
     private fun scanInt(): Int {
         val word = scan()
         if (word.length == 0) {
@@ -148,32 +161,5 @@ data class Machine(var pc: Int, val noOfRegisters: Int) {
             return Integer.MAX_VALUE
         }
 
-    }
-
-    companion object {
-
-        @JvmStatic
-        fun main(args: Array<String>) {
-
-            if (args.size != 1) {
-                System.err.println("Incorrect number of arguments - Machine <file> - required")
-                System.exit(-1)
-            }
-
-            val m = Machine(0, 32) // initialise to first instruction
-            if (!m.readAndTranslate(args[0])) { // convert and add to machine
-                println("Translation phase failed!!")
-            } else {
-                println("Here is the program; it has " + m.prog.size + " instructions.")
-                println(m)
-
-                print("Beginning program execution...")
-                m.execute()
-                println("Ending program execution.")
-
-                println("Values of registers at program termination:")
-                println("" + m.registers + ".")
-            }
-        }
     }
 }

@@ -1,6 +1,7 @@
+package sml
+
 /**
  * This class ....
- *
  *
  * An instance contains 32 registers and methods to access and change them
  *
@@ -18,9 +19,10 @@ data class Registers(val NUMBEROFREGISTERS: Int) {
         }
     }
 
-    // Set register i to v.
-    // Precondition: 0 <= i <= NUMBEROFREGISTERS
-
+    /**
+     * Set register i to v.
+     * Precondition: 0 <= i <= NUMBEROFREGISTERS
+     */
     fun setRegister(i: Int, v: Int) {
         registers[i] = v
     }
@@ -30,7 +32,7 @@ data class Registers(val NUMBEROFREGISTERS: Int) {
     }
 
     override fun toString(): String {
-        return "sml.Registers(registers=" + java.util.Arrays.toString(this.registers) + ")"
+        return "sml.sml.Registers(registers=" + java.util.Arrays.toString(this.registers) + ")"
     }
 
 }

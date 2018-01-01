@@ -1,8 +1,12 @@
 # Assignment One
 
-The first coursework assignment on a Simple sml.Machine Language (SML) interpreter.
+The first coursework assignment on a Simple Machine Language (SML) interpreter.
 
-The aim of this assignment is to give you practice with subclasses, modifying existing code, and the use of reflection.
+The aim of this assignment is to give you practice with:
++ subclasses, 
++ understanding and modifying existing code, 
++ learning the translation of syntax from Java, and 
++ the use of reflection.
 
 ## The problem
 
@@ -66,12 +70,11 @@ Follow our directions on carrying out the project, and the work should take arou
 
 ## Design of the program
 
-We provide some of the classes, provide specifications of a few, and leave a few for you to write/complete. 
-The code we provide does some of the dirty work of reading in a program and translating it to an internal form, so you can concentrate just on the code that executes the program. 
+We provide some of the classes, provide specifications of a few, 
+and leave a few for you to write/complete. 
+The code we provide does some of the dirty work of reading in a program and translating 
+it to an internal form, so you can concentrate just on the code that executes the program. 
 Study the class `sml.Machine` first, for it is the heart of the program.
-
-**Please note**: The following description mainly relates to the Kotlin version of the source code. The Scala version is somewhat shorter as several constructs are easier to achieve using that language. 
-Please consult the Scala source code for further details.
 
 ## Studying the program
 
@@ -85,23 +88,28 @@ an SML program:
 + the *registers* of the machine, and
 + the *program counter* — the number of the next instruction to execute.
 
-Array like structures are used for the labels and the instructions of the machine because there is no limit to the size of an SML program. 
+List like structures are used for the labels and the instructions of the machine because 
+there is no limit to the size of an SML program. 
 An array is used for the registers because there are always exactly 32 registers.
 
 Now read method `sml.Machine.execute`, which executes the program. 
 It is a typical *fetch-execute* cycle that all machines have in some form. 
-At each iteration, the instruction to execute is fetched, the program counter is incremented, and the instruction is executed. 
+At each iteration, the instruction to execute is fetched, the program counter is incremented, 
+and the instruction is executed. 
 The order of the last two instructions is important, because an instruction (e.g., `bnz`) 
 might change the program counter.
 
-The class `Translator` contains the methods that read in the program and translate it into an internal form; very little error checking goes on here. 
-For example, there is no checking for duplicate label definitions, for the use of a label that doesn’t exist, and for a register number not in the range 0 ... 31.
+The class contains the methods that read in the program and translate it into an internal form; 
+very little error checking goes on here. 
+For example, there is no checking for duplicate label definitions, 
+for the use of a label that doesn’t exist, and for a register number not in the range ```0..31```.
 
-Finally, study the `main` method/function.
+Finally, study the `main` function.
 
 ## Class `sml.Instruction` and it subclasses
 
-All the programming that you do has to do with class `sml.Instruction` and its subclasses. 
+All the programming that you are required to do has to do with class `sml.Instruction` 
+and its subclasses. 
 The specification of class has been given to you and you should examine it.
 
 This class is *abstract*, because it should not be instantiated. 
@@ -110,32 +118,47 @@ The method `execute` is also abstract, forcing every subclass to implement it.
 Every instruction has a label and an operation — that is exactly what is common to every instruction. 
 Therefore, these properties are maintained in the base class of all instructions.
 
+You are only allowed to add
+subclasses of `Instruction` and to modify the multi-branch selection in `Machine` (by adding
+choices); you should not modify any of the other code. Your code will be tested against the 
+existing versions of the remaining code.
+
 ## Your tasks
 
-1. Your first task is to complete the methods in the class `sml.Instruction` — this may require you to add some fields, which should be protected, so that they are accessible in subclasses and not to the *outside* world.
+1. Your first task is to complete the methods (if any) in the class `sml.Instruction` — 
+this may require you to add some fields, which should be protected, 
+so that they are accessible in subclasses and not to the *outside* world.
 
-2. Now create a subclass of `sml.Instruction` for each kind of SML instruction and 
-fix `Translator.instruction` so that it properly translates that kind of instruction.
+2. Then create a subclass of `sml.Instruction` for each kind of SML instruction and 
+fix `Machine` so that it properly translates that kind of instruction. 
 
- **Recommended**: Write one instruction at a time and check it out thoroughly, before proceeding to the next!
+ **Recommended**: Write one instruction at a time and check it out thoroughly, 
+ before proceeding to the next!
 
  For example, your first program will consist only of `add` instructions. 
-After you have checked that the instruction `add` works correctly, progress to working with the 
-`add` and `subtract` instructions, etc. 
-As you do this, you will see that each successive class can be written by duplicating a previous one and modifying it (obviously avoiding too much repeated code).
+ After you have checked that the instruction `add` works correctly, progress to working with the 
+`multiply`, `subtract` instructions, etc. 
 
-3. For each instruction, the subclass needs appropriate fields, a constructor, method `toString`, and a method `execute`; `toString` and `execute` should override the same methods in class `sml.Instruction`.
+ As you do this, you will see that each successive class can be written by duplicating a 
+ previous one and modifying it (obviously avoiding too much repeated code - remember **DRY**).
 
-4. Start with the `add` instruction, because the code for translating it is already there — in method `Translator.instruction`. 
-Initially, the program will not compile because there is no class for the instruction `add`. 
-Once that class is suitably written, the program will compile.
+3. For each instruction, the subclass needs appropriate fields, a constructor, 
+method `toString`, and a method `execute`; `toString` and `execute` should override the same methods in class `sml.Instruction`.
 
-5. After you finish writing a subclass for an SML (except for `add`), you have to add code to the method `Translator.instruction` to translate that instruction. 
-The code for translating `add` should help you with this.
+4. Start with the `add` instruction, because the code for translating it is already present in `Machine`. 
+We have provided an outline implementation for the instruction `add` which enables the
+program to compile and run.
 
-6. Now take the multi-branch statement that decides which type of instruction is created, and modify the code so that it uses *reflection* to create the instances, i.e., remove the explicit calls to the subclasses. 
-This will allow the SML language to be extended without having to modify the original code.
+5. After you finish writing a subclass for an SML instruction, you have to add code to translate that instruction (except for `add`, and `lin`).  The code for translating `add` and `lin` 
+should help you with this.
+
+6. Now, the main part of the assignment. 
+
+ Take the multi-branch statement that decides which type of instruction is created, and modify the 
+ code so that it uses *reflection* to create the instances, i.e., remove the explicit calls to the 
+ subclasses. 
+ This will allow the SML language to be extended without having to modify the original code.
 
 ## Submission
 
-As part of your portfolio your repository will be cloned at the appropriate due date and time.
+As part of your portfolio your repository will be *cloned* at the appropriate due date and time.

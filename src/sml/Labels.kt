@@ -5,7 +5,7 @@ package sml
  * in the order in which they were added to the list.
  */
 class Labels {
-    private var labels: MutableList<String>
+    private val labels: MutableList<String>
 
     init {
         labels = ArrayList<String>()

@@ -7,7 +7,6 @@ import java.io.File
 import java.io.IOException
 import java.util.Scanner
 import kotlin.collections.ArrayList
-import kotlin.collections.MutableList
 
 /*
  * The machine language interpreter
@@ -66,7 +65,7 @@ data class Machine(var pc: Int, val noOfRegisters: Int) {
      */
     fun readAndTranslate(file: String): Boolean {
         val fileName = PATH + file // source file of SML code
-        try {
+        return try {
             Scanner(File(fileName)).use { sc ->
                 // Scanner attached to the file chosen by the user
                 labels.reset()
@@ -79,51 +78,44 @@ data class Machine(var pc: Int, val noOfRegisters: Int) {
                     val label = scan()
 
                     if (label.length > 0) {
-                        val ins = getInstruction(label)
-                        if (ins != null) {
-                            labels.addLabel(label)
-                            prog.add(ins)
-                        }
+                        labels.addLabel(label)
+                        prog.add(getInstruction(label))
                     }
                 }
             }
+            true
         } catch (ioE: IOException) {
             println("File: IO error " + ioE.message)
-            return false
+            false
         }
-
-        return true
     }
 
     /**
      * line should consist of an MML instruction, with its label already removed.
      * Translate line into an instruction with label label and return the instruction
      */
-    fun getInstruction(label: String): Instruction? {
+    fun getInstruction(label: String): Instruction {
         val s1: Int // Possible operands of the instruction
         val s2: Int
         val r: Int
 
-        if (line == "")
-            return null
-
         val ins = scan()
-        when (ins) { // replace with reflection
+        return when (ins) { // replace with reflection
             "add" -> {
                 r = scanInt()
                 s1 = scanInt()
                 s2 = scanInt()
-                return AddInstruction(label, r, s1, s2)
+                AddInstruction(label, r, s1, s2)
             }
             "lin" -> {
                 r = scanInt()
                 s1 = scanInt()
-                return LinInstruction(label, r, s1)
+                LinInstruction(label, r, s1)
             }
+        // You will have to write code here for the other instructions
             else -> {
-                return NoOpInstruction(label, line)
+                NoOpInstruction(label, line)
             }
-        // You will have to write code here for the other instructions.
         }
     }
 
@@ -155,11 +147,10 @@ data class Machine(var pc: Int, val noOfRegisters: Int) {
             return Integer.MAX_VALUE
         }
 
-        try {
-            return Integer.parseInt(word)
+        return try {
+            Integer.parseInt(word)
         } catch (e: NumberFormatException) {
-            return Integer.MAX_VALUE
+            Integer.MAX_VALUE
         }
-
     }
 }

@@ -18,7 +18,6 @@ fun main(args: Array<String>) {
         m.execute()
         println("Ending program execution.")
 
-        println("Values of registers at program termination:")
-        println("" + m.registers + ".")
+        println("Values of registers at program termination: " + m.registers + ".")
     }
 }
